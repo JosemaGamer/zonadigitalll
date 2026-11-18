@@ -306,19 +306,19 @@
         <form id="product-form" onsubmit="addProduct(event)">
             <div class="form-group">
                 <label>Título del Producto / Combo:</label>
-                <input type="text" id="p-title" required placeholder="Ej: Súper Combo Parlante + Reloj">
+                <input type="text" id="p-title" required placeholder="Ej: Parlante Mixor Sol">
             </div>
             <div class="form-group">
                 <label>Descripción:</label>
-                <textarea id="p-desc" rows="2" required placeholder="Ej: Parlante Mixor Sol + Reloj Mixor Pulso."></textarea>
+                <textarea id="p-desc" rows="2" required placeholder="Ej: Conexión Bluetooth y gran potencia."></textarea>
             </div>
             <div class="form-group">
                 <label>Precio ($):</label>
                 <input type="text" id="p-price" required placeholder="Ej: $45.000">
             </div>
             <div class="form-group">
-                <label>Foto del Producto (Seleccioná desde tu dispositivo):</label>
-                <input type="file" id="p-image-file" accept="image/*" onchange="convertImage(event)" required>
+                <label>Enlace de Google Drive de la foto:</label>
+                <input type="text" id="p-image-url" required placeholder="Pegá el link de compartir de Google Drive acá">
             </div>
             <button type="submit" class="btn-submit">Publicar en el Catálogo</button>
         </form>
@@ -339,11 +339,9 @@
     </footer>
 
     <script>
-        // Credenciales oficiales de Zona Digital
+        // Credenciales oficiales fijas
         const USER_ADMIN = "ZonaDigital";
         const PASS_ADMIN = "23818244";
-
-        let tempImageBase64 = "";
 
         let products = JSON.parse(localStorage.getItem('zd_products')) || [
             { id: 1, title: "Súper Combo Imperdible", desc: "Parlante Mixor Sol + Reloj Mixor Pulso.", price: "$45.000", image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=80" },
@@ -365,22 +363,19 @@
                 } else {
                     panel.style.display = 'block';
                     body.classList.add('admin-mode');
-                    alert("¡Acceso concedido! Ya podés cargar precios, fotos y administrar tu stock.");
+                    alert("¡Acceso concedido! Ya podés cargar precios, fotos de Drive y administrar tu stock.");
                 }
             } else {
                 alert("Usuario o contraseña incorrectos.");
             }
         }
 
-        function convertImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    tempImageBase64 = reader.result;
-                }
-                reader.readAsDataURL(file);
+        function parseDriveUrl(url) {
+            let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
             }
+            return url;
         }
 
         function addProduct(e) {
@@ -388,24 +383,21 @@
             const title = document.getElementById('p-title').value;
             const desc = document.getElementById('p-desc').value;
             const price = document.getElementById('p-price').value;
+            const rawUrl = document.getElementById('p-image-url').value;
             
-            if (!tempImageBase64) {
-                alert("Por favor seleccioná una imagen.");
-                return;
-            }
+            const image = parseDriveUrl(rawUrl);
 
             const newProd = {
                 id: Date.now(),
                 title,
                 desc,
                 price,
-                image: tempImageBase64
+                image
             };
 
             products.unshift(newProd);
             saveAndRender();
             document.getElementById('product-form').reset();
-            tempImageBase64 = "";
             alert("¡Producto publicado correctamente!");
         }
 
