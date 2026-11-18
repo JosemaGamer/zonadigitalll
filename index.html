@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Digital - Catálogo Oficial</title>
+    <style>
+        :root {
+            --bg-color: #0b0b0b;
+            --card-bg: #141414;
+            --accent-color: #00d2ff;
+            --whatsapp-color: #25d366;
+            --text-main: #ffffff;
+            --text-muted: #b0b0b0;
+            --border-color: #262626;
+            --danger-color: #ff4757;
+            --price-color: #00ffa6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 24px;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .admin-btn {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        #admin-panel {
+            display: none;
+            background: #1a1a1a;
+            border: 1px solid var(--accent-color);
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        #admin-panel h3 {
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #101010;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .btn-submit {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background-color: #1f1f1f;
+        }
+
+        .product-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .product-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--price-color);
+            margin-bottom: 12px;
+        }
+
+        .footer-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+
+        .stock-badge {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .btn-delete {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .admin-mode .btn-delete {
+            display: block;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--whatsapp-color);
+            color: #ffffff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            margin-top: 60px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 1200px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body id="body">
+
+    <header>
+        <div class="brand-section">
+            <div class="logo-icon">Z</div>
+            <div>
+                <h1>Zona Digital</h1>
+                <p class="subtitle">Catálogo Oficial de Productos</p>
+            </div>
+        </div>
+        <button class="admin-btn" onclick="toggleAdmin()">Panel Admin</button>
+    </header>
+
+    <!-- Panel de Administración -->
+    <div id="admin-panel">
+        <h3>Panel de Control - Zona Digital</h3>
+        <form id="product-form" onsubmit="addProduct(event)">
+            <div class="form-group">
+                <label>Título del Producto / Combo:</label>
+                <input type="text" id="p-title" required placeholder="Ej: Súper Combo Parlante + Reloj">
+            </div>
+            <div class="form-group">
+                <label>Descripción:</label>
+                <textarea id="p-desc" rows="2" required placeholder="Ej: Parlante Mixor Sol + Reloj Mixor Pulso."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Precio ($):</label>
+                <input type="text" id="p-price" required placeholder="Ej: $45.000">
+            </div>
+            <div class="form-group">
+                <label>Foto del Producto (Seleccioná desde tu dispositivo):</label>
+                <input type="file" id="p-image-file" accept="image/*" onchange="convertImage(event)" required>
+            </div>
+            <button type="submit" class="btn-submit">Publicar en el Catálogo</button>
+        </form>
+    </div>
+
+    <!-- Grilla del Catálogo -->
+    <div class="catalog-grid" id="catalog-grid"></div>
+
+    <!-- Botón Flotante WhatsApp -->
+    <a href="https://wa.me/543755646464?text=Hola!%20Quiero%20consultar%20por%20los%20productos%20de%20Zona%20Digital." class="whatsapp-float" target="_blank" title="Escribinos por WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.068 7.925c0 1.399.366 2.76 1.057 3.965L0 16l4.223-1.106a7.85 7.85 0 0 0 3.772.958h.003c4.365 0 7.924-3.558 7.924-7.925 0-2.11-.822-4.095-2.321-5.601zM7.994 14.521c-1.168 0-2.312-.314-3.312-.907l-.237-.14-2.463.645.658-2.4-.153-.245a6.377 6.377 0 0 1-.976-3.417c0-3.52 2.866-6.386 6.391-6.386 1.711 0 3.321.667 4.532 1.878a6.368 6.368 0 0 1 1.876 4.533c0 3.525-2.872 6.391-6.394 6.391zm3.504-4.771c-.192-.096-1.137-.56-1.313-.624-.177-.064-.306-.096-.434.096-.128.192-.504.624-.618.752-.114.128-.228.144-.42.048-.192-.096-.813-.3-1.547-.954-.572-.51-.958-1.14-1.072-1.332-.114-.192-.012-.296.084-.392.087-.088.192-.228.288-.342.096-.114.128-.192.192-.32.064-.128.032-.24-.016-.336-.048-.096-.434-1.048-.596-1.436-.157-.381-.318-.33-.434-.336l-.371-.006c-.128 0-.336.048-.512.24-.177.192-.674.658-.674 1.605s.69 1.86.786 1.988c.096.128 1.352 2.067 3.275 2.897.458.198.815.316 1.093.404.461.147.882.126 1.213.077.373-.056 1.137-.465 1.298-.915.16-.45.16-.836.112-.915-.048-.079-.176-.127-.368-.224z"/>
+        </svg>
+    </a>
+
+    <footer>
+        <p>© 2026 Zona Digital • ¡Escribinos y llevate el tuyo!</p>
+    </footer>
+
+    <script>
+        // Credenciales oficiales de Zona Digital
+        const USER_ADMIN = "ZonaDigital";
+        const PASS_ADMIN = "23818244";
+
+        let tempImageBase64 = "";
+
+        let products = JSON.parse(localStorage.getItem('zd_products')) || [
+            { id: 1, title: "Súper Combo Imperdible", desc: "Parlante Mixor Sol + Reloj Mixor Pulso.", price: "$45.000", image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, title: "Receptor de Audio Bluetooth Netmak", desc: "Convierte tu estéreo convencional en inalámbrico.", price: "$12.500", image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80" }
+        ];
+
+        function toggleAdmin() {
+            let u = prompt("Usuario administrador:");
+            let p = prompt("Contraseña:");
+            
+            if (!u || !p) return;
+
+            if (u === USER_ADMIN && p === PASS_ADMIN) {
+                let panel = document.getElementById('admin-panel');
+                let body = document.getElementById('body');
+                if (panel.style.display === 'block') {
+                    panel.style.display = 'none';
+                    body.classList.remove('admin-mode');
+                } else {
+                    panel.style.display = 'block';
+                    body.classList.add('admin-mode');
+                    alert("¡Acceso concedido! Ya podés cargar precios, fotos y administrar tu stock.");
+                }
+            } else {
+                alert("Usuario o contraseña incorrectos.");
+            }
+        }
+
+        function convertImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    tempImageBase64 = reader.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function addProduct(e) {
+            e.preventDefault();
+            const title = document.getElementById('p-title').value;
+            const desc = document.getElementById('p-desc').value;
+            const price = document.getElementById('p-price').value;
+            
+            if (!tempImageBase64) {
+                alert("Por favor seleccioná una imagen.");
+                return;
+            }
+
+            const newProd = {
+                id: Date.now(),
+                title,
+                desc,
+                price,
+                image: tempImageBase64
+            };
+
+            products.unshift(newProd);
+            saveAndRender();
+            document.getElementById('product-form').reset();
+            tempImageBase64 = "";
+            alert("¡Producto publicado correctamente!");
+        }
+
+        function deleteProduct(id) {
+            if (confirm("¿Estás seguro de eliminar este producto?")) {
+                products = products.filter(p => p.id !== id);
+                saveAndRender();
+            }
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('zd_products', JSON.stringify(products));
+            renderCatalog();
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            grid.innerHTML = "";
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <button class="btn-delete" onclick="deleteProduct(${p.id})">Eliminar</button>
+                        <img src="${p.image}" alt="${p.title}" class="product-image">
+                        <div class="product-info">
+                            <div>
+                                <h2 class="product-title">${p.title}</h2>
+                                <p class="product-desc">${p.desc}</p>
+                                <div class="product-price">${p.price}</div>
+                            </div>
+                            <div class="footer-card">
+                                <span class="stock-badge">¡Stock disponible!</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        renderCatalog();
+    </script>
+</body>
+</html>
